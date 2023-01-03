@@ -1,3 +1,4 @@
+import styles from "../../styles/Home.module.css"
 import { MouseEventHandler } from "react";
 import { Button } from "react-bootstrap";
 
@@ -13,11 +14,10 @@ function Header({ targetNetwork, connectedWallet, connect }: FunctionProps) {
     }
 
     return (
-        <header className="App-header">
+        <header className={styles.description}>
             <h1>EthernautDAO OP Token Claim</h1>
 
-
-            <div className="wallet-panel">
+            <div>
                 <Button onClick={connect}>
                     {
                         connectedWallet !== "" ?
@@ -26,7 +26,7 @@ function Header({ targetNetwork, connectedWallet, connect }: FunctionProps) {
                             <span>Connect wallet</span>
                     }
                 </Button>
-                <span className="header-target-network" style={{ color: targetNetwork.color }}>{targetNetwork.name}</span>
+                <span style={{ color: targetNetwork.color }}>{targetNetwork.name}</span>
             </div>
         </header>
     );
