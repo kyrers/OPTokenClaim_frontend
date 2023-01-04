@@ -8,7 +8,7 @@ type FunctionProps = {
     connect: MouseEventHandler<HTMLButtonElement>;
 };
 
-function Header({ targetNetwork, connectedWallet, connect }: FunctionProps) {
+export default function Header({ targetNetwork, connectedWallet, connect }: FunctionProps) {
     const formatAddress = (address: string) => {
         return address.substring(0, 6) + "..." + address.slice(-4);
     }
@@ -31,5 +31,3 @@ function Header({ targetNetwork, connectedWallet, connect }: FunctionProps) {
         </header>
     );
 }
-
-export default Header;
