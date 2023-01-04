@@ -5,6 +5,7 @@ import { targetNetwork } from "../config/config";
 import { connect } from "../functions/connect";
 import Header from "./components/Header";
 import MainPanel from "./components/MainPanel";
+import Footer from "./components/Footer";
 
 export default function Home() {
   const [userSigner, setUserSigner] = useState<JsonRpcSigner | null>();
@@ -58,6 +59,7 @@ export default function Home() {
       <main className={styles.main}>
         <Header targetNetwork={targetNetwork} connectedWallet={connectedWallet} connect={() => connect(displayAlert)} />
         <MainPanel />
+        <Footer />
       </main>
     </>
   )
