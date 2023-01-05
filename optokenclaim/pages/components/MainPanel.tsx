@@ -1,10 +1,11 @@
-import { useState } from "react";
+import styles from "../../styles/Home.module.css";
 import { Card } from "react-bootstrap";
-import styles from "../../styles/Home.module.css"
 
-export default function MainPanel() {
-    const [currentEpoch, setCurrentEpoch] = useState(0);
+type FunctionProps = {
+    currentEpoch: number
+};
 
+export default function MainPanel({ currentEpoch }: FunctionProps) {
     const SubscribeCard = () => {
         const onSubscribe = async (e: any) => {
             e.preventDefault();

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { JsonRpcSigner } from "@ethersproject/providers";
 import { targetNetwork } from "../config/config";
 import { connect } from "../functions/connect";
+import { loadClaimContract, loadCurrentEpoch } from "../functions/contract";
 import Header from "./components/Header";
 import MainPanel from "./components/MainPanel";
 import Footer from "./components/Footer";
@@ -10,6 +11,8 @@ import Footer from "./components/Footer";
 export default function Home() {
   const [userSigner, setUserSigner] = useState<JsonRpcSigner | null>();
   const [connectedWallet, setConnectedWallet] = useState("");
+  const [claimContract, setClaimContract] = useState<any>();
+  const [currentEpoch, setCurrentEpoch] = useState(0);
   const [showAlert, setShowAlert] = useState(false);
   const [alertType, setAlertType] = useState("");
   const [alertTitle, setAlertTitle] = useState("");
@@ -18,17 +21,13 @@ export default function Home() {
   /*------------------------------------------------------------
                                HOOKS
   --------------------------------------------------------------*/
-  //Connect user wallet & load contract info
+  //Connect user wallet & load contract
   useEffect(() => {
-    const promptConnect = async () => {
-      const { signer, signerAddress } = await connect(displayAlert);
-      setUserSigner(signer);
-      setConnectedWallet(signerAddress);
-    }
-
+    loadContract();
     promptConnect();
   }, []);
 
+  //Listen to wallet and network changes
   useEffect(() => {
     //Listen to wallet changes
     window.ethereum.on('accountsChanged', () => {
@@ -40,11 +39,45 @@ export default function Home() {
       window.location.reload();
     });
   }, []);
+
+  //Get current epoch
+  useEffect(() => {
+    if (undefined !== claimContract) {
+      getCurrentEpoch();
+    };
+  }, [claimContract]);
+
+  //Connect user wallet to contract
+  useEffect(() => {
+    if (undefined !== claimContract && null !== userSigner) {
+      connectUserToContract();
+    }
+  }, [userSigner])
   //-------
 
   /*------------------------------------------------------------
                                  FUNCTIONS
   --------------------------------------------------------------*/
+  const loadContract = async () => {
+    const contract = await loadClaimContract();
+    setClaimContract(contract);
+  };
+
+  const promptConnect = async () => {
+    const { signer, signerAddress } = await connect(displayAlert);
+    setUserSigner(signer);
+    setConnectedWallet(signerAddress);
+  };
+
+  const connectUserToContract = async () => {
+    setClaimContract(await claimContract.connect(userSigner));
+  }
+
+  const getCurrentEpoch = async () => {
+    const epoch = await loadCurrentEpoch(claimContract);
+    setCurrentEpoch(epoch);
+  }
+
   const displayAlert = (type: string, title: string, text: string) => {
     setAlertType(type);
     setAlertTitle(title);
@@ -53,12 +86,11 @@ export default function Home() {
   }
   //-------
 
-
   return (
     <>
       <main className={styles.main}>
         <Header targetNetwork={targetNetwork} connectedWallet={connectedWallet} connect={() => connect(displayAlert)} />
-        <MainPanel />
+        <MainPanel currentEpoch={currentEpoch} />
         <Footer />
       </main>
     </>
