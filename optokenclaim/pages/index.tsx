@@ -13,10 +13,6 @@ export default function Home() {
   const [connectedWallet, setConnectedWallet] = useState("");
   const [claimContract, setClaimContract] = useState<any>();
   const [currentEpoch, setCurrentEpoch] = useState(0);
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertType, setAlertType] = useState("");
-  const [alertTitle, setAlertTitle] = useState("");
-  const [alertText, setAlertText] = useState("");
 
   /*------------------------------------------------------------
                                HOOKS
@@ -64,7 +60,7 @@ export default function Home() {
   };
 
   const promptConnect = async () => {
-    const { signer, signerAddress } = await connect(displayAlert);
+    const { signer, signerAddress } = await connect();
     setUserSigner(signer);
     setConnectedWallet(signerAddress);
   };
@@ -77,20 +73,14 @@ export default function Home() {
     const epoch = await loadCurrentEpoch(claimContract);
     setCurrentEpoch(epoch);
   }
-
-  const displayAlert = (type: string, title: string, text: string) => {
-    setAlertType(type);
-    setAlertTitle(title);
-    setAlertText(text);
-    setShowAlert(true);
-  }
   //-------
 
   return (
     <>
       <main className={styles.main}>
-        <Header targetNetwork={targetNetwork} connectedWallet={connectedWallet} connect={() => connect(displayAlert)} />
-        <MainPanel currentEpoch={currentEpoch} />
+        <Header targetNetwork={targetNetwork} connectedWallet={connectedWallet} connect={() => connect()} />
+        {"" === connectedWallet ? <p>Connect wallet to continue</p> : <></>}
+        <MainPanel currentEpoch={currentEpoch} disableButtons={"" === connectedWallet} />
         <Footer />
       </main>
     </>

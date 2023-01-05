@@ -1,11 +1,11 @@
 import styles from "../../styles/Home.module.css";
-import { Card } from "react-bootstrap";
 
 type FunctionProps = {
-    currentEpoch: number
+    currentEpoch: number;
+    disableButtons: boolean;
 };
 
-export default function MainPanel({ currentEpoch }: FunctionProps) {
+export default function MainPanel({ currentEpoch, disableButtons }: FunctionProps) {
     const SubscribeCard = () => {
         const onSubscribe = async (e: any) => {
             e.preventDefault();
@@ -19,7 +19,7 @@ export default function MainPanel({ currentEpoch }: FunctionProps) {
                 <form onSubmit={onSubscribe}>
                     <label htmlFor="subscribeAddress">Address</label>
                     <input id="subscribe_address" name="address" type="text" minLength={42} maxLength={42} required placeholder="Subscribe Address" />
-                    <button type="submit">Subscribe</button>
+                    <button disabled={disableButtons} type="submit">Subscribe</button>
                 </form>
             </>
         );
@@ -43,7 +43,7 @@ export default function MainPanel({ currentEpoch }: FunctionProps) {
                     <label htmlFor="claimAddress">Epoch</label>
                     <input id="claim_epoch" name="epoch" type="number" min={0} max={currentEpoch > 0 ? currentEpoch - 1 : 0} required placeholder="Epoch" />
 
-                    <button type="submit">Claim</button>
+                    <button disabled={disableButtons} type="submit">Claim</button>
                 </form>
             </>
         );
@@ -52,14 +52,15 @@ export default function MainPanel({ currentEpoch }: FunctionProps) {
     return (
         <div className={styles.mainPanel}>
             <h2>Current Epoch: {currentEpoch} </h2>
-            <div className={styles.grid}>
-                <Card className={styles.card} title="Subscribe">
-                    <SubscribeCard />
-                </Card>
 
-                <Card className={styles.card} title="Claim OP">
+            <div className={styles.grid}>
+                <div className={styles.card} title="Subscribe">
+                    <SubscribeCard />
+                </div>
+
+                <div className={styles.card} title="Claim OP">
                     <ClaimCard />
-                </Card>
+                </div>
             </div>
         </div>
     );

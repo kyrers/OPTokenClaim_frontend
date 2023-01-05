@@ -1,7 +1,7 @@
 import { ethers } from "ethers";
 import { targetNetwork } from '../config/config';
 
-export const connect = async (displayAlert: (type: string, title: string, text: string) => void) => {
+export const connect = async () => {
     if (window.ethereum) {
         try {
             await window.ethereum.request({ method: 'eth_requestAccounts' });
@@ -35,11 +35,9 @@ export const connect = async (displayAlert: (type: string, title: string, text: 
             const signerAddress = await signer.getAddress();
             return { signer: signer, signerAddress: signerAddress };
         } catch (error: any) {
-            displayAlert("danger", "Error", "Please finish connecting your wallet to continue");
             return { signer: null, signerAddress: "" };
         }
     } else {
-        displayAlert("danger", "Error", "Please install metamask to continue");
         return { signer: null, signerAddress: "" };
     }
 }
