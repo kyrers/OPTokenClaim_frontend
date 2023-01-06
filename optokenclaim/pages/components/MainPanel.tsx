@@ -19,7 +19,7 @@ export default function MainPanel({ currentEpoch, disableButtons }: FunctionProp
                 <form onSubmit={onSubscribe}>
                     <label htmlFor="subscribeAddress">Address</label>
                     <input id="subscribe_address" name="address" type="text" minLength={42} maxLength={42} required placeholder="Subscribe Address" />
-                    <button disabled={disableButtons} type="submit">Subscribe</button>
+                    <button disabled={disableButtons} type="submit">{disableButtons ? "Connect Wallet" : "Subscribe"}</button>
                 </form>
             </>
         );
@@ -43,7 +43,7 @@ export default function MainPanel({ currentEpoch, disableButtons }: FunctionProp
                     <label htmlFor="claimAddress">Epoch</label>
                     <input id="claim_epoch" name="epoch" type="number" min={0} max={currentEpoch > 0 ? currentEpoch - 1 : 0} required placeholder="Epoch" />
 
-                    <button disabled={disableButtons} type="submit">Claim</button>
+                    <button disabled={disableButtons} type="submit">{disableButtons ? "Connect Wallet" : "Claim"}</button>
                 </form>
             </>
         );

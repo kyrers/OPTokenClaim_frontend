@@ -79,7 +79,6 @@ export default function Home() {
     <>
       <main className={styles.main}>
         <Header targetNetwork={targetNetwork} connectedWallet={connectedWallet} connect={() => connect()} />
-        {"" === connectedWallet ? <p>Connect wallet to continue</p> : <></>}
         <MainPanel currentEpoch={currentEpoch} disableButtons={"" === connectedWallet} />
         <Footer />
       </main>
