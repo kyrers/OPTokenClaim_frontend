@@ -7,12 +7,16 @@ import { loadClaimContract, loadCurrentEpoch } from "../functions/contract";
 import Header from "./components/Header";
 import MainPanel from "./components/MainPanel";
 import Footer from "./components/Footer";
+import AlertScreen from "./components/AlertScreen";
 
 export default function Home() {
   const [userSigner, setUserSigner] = useState<JsonRpcSigner | null>();
   const [connectedWallet, setConnectedWallet] = useState("");
   const [claimContract, setClaimContract] = useState<any>();
   const [currentEpoch, setCurrentEpoch] = useState(0);
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertType, setAlertType] = useState("");
+  const [alertText, setAlertText] = useState("");
 
   /*------------------------------------------------------------
                                HOOKS
@@ -73,13 +77,20 @@ export default function Home() {
     const epoch = await loadCurrentEpoch(claimContract);
     setCurrentEpoch(epoch);
   }
+
+  const subscribe = async () => {
+    setAlertText("Subscribing");
+    setAlertType("loading");
+    setShowAlert(true);
+  }
   //-------
 
   return (
     <>
       <main className={styles.main}>
         <Header targetNetwork={targetNetwork} connectedWallet={connectedWallet} connect={() => connect()} />
-        <MainPanel currentEpoch={currentEpoch} disableButtons={"" === connectedWallet} />
+        <MainPanel currentEpoch={currentEpoch} disableButtons={"" === connectedWallet} subscribe={subscribe}/>
+        <AlertScreen show={showAlert} type={alertType} text={alertText} setShow={setShowAlert} />
         <Footer />
       </main>
     </>
