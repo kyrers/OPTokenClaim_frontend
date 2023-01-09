@@ -3,11 +3,11 @@ import { useEffect, useState } from "react";
 import { JsonRpcSigner } from "@ethersproject/providers";
 import { targetNetwork } from "../config/config";
 import { connect } from "../functions/connect";
-import { loadClaimContract, loadCurrentEpoch } from "../functions/contract";
+import { loadClaimContract, loadCurrentEpoch, subscribeAddress } from "../functions/contract";
 import Header from "./components/Header";
 import MainPanel from "./components/MainPanel";
 import Footer from "./components/Footer";
-import AlertScreen from "./components/AlertScreen";
+import AlertScreen, { loadingElement } from "./components/AlertScreen";
 
 export default function Home() {
   const [userSigner, setUserSigner] = useState<JsonRpcSigner | null>();
@@ -15,8 +15,7 @@ export default function Home() {
   const [claimContract, setClaimContract] = useState<any>();
   const [currentEpoch, setCurrentEpoch] = useState(0);
   const [showAlert, setShowAlert] = useState(false);
-  const [alertType, setAlertType] = useState("");
-  const [alertText, setAlertText] = useState("");
+  const [alertElement, setAlertElement] = useState<JSX.Element>(<></>);
 
   /*------------------------------------------------------------
                                HOOKS
@@ -78,9 +77,13 @@ export default function Home() {
     setCurrentEpoch(epoch);
   }
 
-  const subscribe = async () => {
-    setAlertText("Subscribing");
-    setAlertType("loading");
+  const subscribe = async (address: string) => {
+    displayAlert(loadingElement("Subscribing"));
+    await subscribeAddress(claimContract, address, displayAlert);
+  }
+
+  const displayAlert = (element: JSX.Element) => {
+    setAlertElement(element);
     setShowAlert(true);
   }
   //-------
@@ -90,7 +93,7 @@ export default function Home() {
       <main className={styles.main}>
         <Header targetNetwork={targetNetwork} connectedWallet={connectedWallet} connect={() => connect()} />
         <MainPanel currentEpoch={currentEpoch} disableButtons={"" === connectedWallet} subscribe={subscribe}/>
-        <AlertScreen show={showAlert} type={alertType} text={alertText} setShow={setShowAlert} />
+        <AlertScreen show={showAlert} element={alertElement} setShow={setShowAlert} />
         <Footer />
       </main>
     </>

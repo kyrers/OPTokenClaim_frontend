@@ -1,5 +1,6 @@
 import { Contract, ethers } from "ethers";
 import { contractAddress, contractABI, targetNetwork } from '../config/config';
+import { transactionFailedElement, transactionSuccessElement } from "../pages/components/AlertScreen";
 
 export const loadClaimContract: any = () => {
     let provider = new ethers.providers.JsonRpcProvider(targetNetwork.rpcUrl)
@@ -9,3 +10,14 @@ export const loadClaimContract: any = () => {
 export const loadCurrentEpoch: any = async (contract: Contract) => {
     return (await contract.currentEpoch()).toNumber();
 };
+
+export const subscribeAddress: any = async (contract: Contract, address: string, displayAlert: (element: JSX.Element) => void) => {
+    try {
+        let tx = await contract.subscribe(address);
+        let receipt = await tx.wait();
+        let blockExplorerUrl = `${targetNetwork.blockExplorer}/tx/${receipt.transactionHash}`;
+        displayAlert(transactionSuccessElement("Transaction succeeded", blockExplorerUrl));
+    } catch (error: any) {
+        displayAlert(transactionFailedElement(`Transaction failed - ${error.data.message}`));
+    }
+}

@@ -3,15 +3,14 @@ import styles from "../../styles/Home.module.css";
 type FunctionProps = {
     currentEpoch: number;
     disableButtons: boolean;
-    subscribe: () => void;
+    subscribe: (address: string) => void;
 };
 
 export default function MainPanel({ currentEpoch, disableButtons, subscribe }: FunctionProps) {
     const SubscribeCard = () => {
         const onSubscribe = async (e: any) => {
             e.preventDefault();
-            console.log("SUBSCRIBE ADDRESS: ", e.target[0].value);
-            subscribe();
+            subscribe(e.target[0].value);
         };
 
         return (
