@@ -18,6 +18,17 @@ export const subscribeAddress: any = async (contract: Contract, address: string,
         let blockExplorerUrl = `${targetNetwork.blockExplorer}/tx/${receipt.transactionHash}`;
         displayAlert(transactionSuccessElement("Transaction succeeded", blockExplorerUrl));
     } catch (error: any) {
-        displayAlert(transactionFailedElement(`Transaction failed - ${error.data.message}`));
+        displayAlert(transactionFailedElement(`Transaction failed ${error.reason !== undefined ? `- ${error.reason}` : ""}`));
+    }
+}
+
+export const claimOPTokens: any = async (contract: Contract, address: string, displayAlert: (element: JSX.Element) => void) => {
+    try {
+        let tx = await contract.claimOP(address);
+        let receipt = await tx.wait();
+        let blockExplorerUrl = `${targetNetwork.blockExplorer}/tx/${receipt.transactionHash}`;
+        displayAlert(transactionSuccessElement("Transaction succeeded", blockExplorerUrl));
+    } catch (error: any) {
+        displayAlert(transactionFailedElement(`Transaction failed ${error.reason !== undefined ? `- ${error.reason}` : ""}`));
     }
 }

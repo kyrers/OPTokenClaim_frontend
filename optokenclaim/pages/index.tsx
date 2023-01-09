@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { JsonRpcSigner } from "@ethersproject/providers";
 import { targetNetwork } from "../config/config";
 import { connect } from "../functions/connect";
-import { loadClaimContract, loadCurrentEpoch, subscribeAddress } from "../functions/contract";
+import { claimOPTokens, loadClaimContract, loadCurrentEpoch, subscribeAddress } from "../functions/contract";
 import Header from "./components/Header";
 import MainPanel from "./components/MainPanel";
 import Footer from "./components/Footer";
@@ -82,6 +82,11 @@ export default function Home() {
     await subscribeAddress(claimContract, address, displayAlert);
   }
 
+  const claimOP = async (address: string) => {
+    displayAlert(loadingElement("Claiming"));
+    await claimOPTokens(claimContract, address, displayAlert);
+  }
+
   const displayAlert = (element: JSX.Element) => {
     setAlertElement(element);
     setShowAlert(true);
@@ -92,7 +97,7 @@ export default function Home() {
     <>
       <main className={styles.main}>
         <Header targetNetwork={targetNetwork} connectedWallet={connectedWallet} connect={() => connect()} />
-        <MainPanel currentEpoch={currentEpoch} disableButtons={"" === connectedWallet} subscribe={subscribe}/>
+        <MainPanel currentEpoch={currentEpoch} disableButtons={"" === connectedWallet} subscribe={subscribe} claimOP={claimOP}/>
         <AlertScreen show={showAlert} element={alertElement} setShow={setShowAlert} />
         <Footer />
       </main>
