@@ -1,4 +1,5 @@
 import styles from "../../styles/Home.module.css";
+import ThemeSwitch from "./ThemeSwitch";
 
 type FunctionProps = {
     currentEpoch: number;
@@ -28,11 +29,14 @@ export default function MainPanel({ currentEpoch, disableButtons, subscribe, cla
 
     return (
         <div className={styles.mainPanel}>
-            <h2>Current Epoch: {currentEpoch} </h2>
+            <div className={styles.mainPanelInfo}>
+                <h2>Current Epoch: {currentEpoch} </h2>
+                <ThemeSwitch />
+            </div>
 
             <div className={styles.grid}>
                 <div className={styles.card} title="Subscribe">
-                    <InputCard title="Subscribe" callback={subscribe}/>
+                    <InputCard title="Subscribe" callback={subscribe} />
                 </div>
 
                 <div className={styles.card} title="Claim OP">

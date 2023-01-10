@@ -15,6 +15,20 @@
   margin-top: 2rem;
 }
 
+.mainPanelInfo {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.toggleSwitch {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  width: 10rem;
+}
+
 .alert {
   position: absolute;
   display: flex;
@@ -83,7 +97,7 @@
 
 .footer svg {
   cursor: pointer;
-  fill: #fff;
+  fill: var(--footer-svg-fill);
   border-radius: 0.5rem;
   margin-left: 1rem;
 }
@@ -231,12 +245,6 @@
 @media (min-width: 701px) and (max-width: 1120px) {
   .grid {
     grid-template-columns: repeat(2, 50%);
-  }
-}
-
-@media (prefers-color-scheme: light) {
-  .footer svg {
-    fill: #585f69;
   }
 }
 
