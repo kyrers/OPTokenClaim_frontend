@@ -195,7 +195,7 @@
 
 @media (max-width: 426px) {
   .main {
-    padding: 6rem 0rem 6rem 0rem;
+    padding: 3rem 0;
   }
 
   .alert {
