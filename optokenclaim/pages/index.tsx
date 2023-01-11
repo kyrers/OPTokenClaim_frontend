@@ -28,15 +28,17 @@ export default function Home() {
 
   //Listen to wallet and network changes
   useEffect(() => {
-    //Listen to wallet changes
-    window.ethereum.on('accountsChanged', () => {
-      window.location.reload();
-    });
+    if (window.ethereum) {
+      //Listen to wallet changes
+      window.ethereum.on('accountsChanged', () => {
+        window.location.reload();
+      });
 
-    //Listen to network changes
-    window.ethereum.on('chainChanged', () => {
-      window.location.reload();
-    });
+      //Listen to network changes
+      window.ethereum.on('chainChanged', () => {
+        window.location.reload();
+      });
+    }
   }, []);
 
   //Get current epoch
@@ -63,7 +65,7 @@ export default function Home() {
   };
 
   const promptConnect = async () => {
-    const { signer, signerAddress } = await connect();
+    const { signer, signerAddress } = await connect(displayAlert);
     setUserSigner(signer);
     setConnectedWallet(signerAddress);
   };
@@ -96,8 +98,8 @@ export default function Home() {
   return (
     <>
       <main className={styles.main}>
-        <Header targetNetwork={targetNetwork} connectedWallet={connectedWallet} connect={() => connect()} />
-        <MainPanel currentEpoch={currentEpoch} disableButtons={"" === connectedWallet} subscribe={subscribe} claimOP={claimOP}/>
+        <Header targetNetwork={targetNetwork} connectedWallet={connectedWallet} connect={() => connect(displayAlert)} />
+        <MainPanel currentEpoch={currentEpoch} disableButtons={"" === connectedWallet} subscribe={subscribe} claimOP={claimOP} />
         <AlertScreen show={showAlert} element={alertElement} setShow={setShowAlert} />
         <Footer />
       </main>

@@ -19,6 +19,10 @@ export default function AlertScreen({ show, element, setShow }: FunctionProps) {
     );
 }
 
+export const installWalletElement = () => {
+    return <div>Please install metamask to continue</div>;
+}
+
 export const loadingElement = (text: string) => {
     return <div className={styles.loading}>{text}</div>;
 }

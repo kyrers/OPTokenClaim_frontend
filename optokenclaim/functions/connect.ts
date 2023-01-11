@@ -1,7 +1,8 @@
 import { ethers } from "ethers";
 import { targetNetwork } from '../config/config';
+import { installWalletElement } from "../pages/components/AlertScreen";
 
-export const connect = async () => {
+export const connect = async (displayAlert: (element: JSX.Element) => void) => {
     if (window.ethereum) {
         try {
             await window.ethereum.request({ method: 'eth_requestAccounts' });
@@ -38,6 +39,7 @@ export const connect = async () => {
             return { signer: null, signerAddress: "" };
         }
     } else {
+        displayAlert(installWalletElement());
         return { signer: null, signerAddress: "" };
     }
 }
