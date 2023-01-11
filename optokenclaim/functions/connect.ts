@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
 import { targetNetwork } from '../config/config';
-import { installWalletElement } from "../pages/components/AlertScreen";
+import { installWalletElement } from "../components/AlertScreen";
 
 export const connect = async (displayAlert: (element: JSX.Element) => void) => {
     if (window.ethereum) {

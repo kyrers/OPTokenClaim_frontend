@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
-import styles from "../../styles/Home.module.css"
+import styles from "../styles/Home.module.css"
 
 type FunctionProps = {
     show: boolean;

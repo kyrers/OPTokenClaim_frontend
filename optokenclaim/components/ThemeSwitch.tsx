@@ -1,4 +1,4 @@
-import styles from "../../styles/Home.module.css"
+import styles from "../styles/Home.module.css"
 import { useState, useEffect } from 'react'
 import { useTheme } from 'next-themes'
 import { BrightnessHighFill, BrightnessLowFill, Lightbulb, LightbulbFill, MoonFill, SunFill } from "react-bootstrap-icons";

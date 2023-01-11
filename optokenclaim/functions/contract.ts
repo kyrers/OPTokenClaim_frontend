@@ -1,6 +1,6 @@
 import { Contract, ethers } from "ethers";
 import { contractAddress, contractABI, targetNetwork } from '../config/config';
-import { transactionFailedElement, transactionSuccessElement } from "../pages/components/AlertScreen";
+import { transactionFailedElement, transactionSuccessElement } from "../components/AlertScreen";
 
 export const loadClaimContract: any = () => {
     let provider = new ethers.providers.JsonRpcProvider(targetNetwork.rpcUrl)

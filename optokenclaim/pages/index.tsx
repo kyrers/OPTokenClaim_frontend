@@ -4,10 +4,10 @@ import { JsonRpcSigner } from "@ethersproject/providers";
 import { targetNetwork } from "../config/config";
 import { connect } from "../functions/connect";
 import { claimOPTokens, loadClaimContract, loadCurrentEpoch, subscribeAddress } from "../functions/contract";
-import Header from "./components/Header";
-import MainPanel from "./components/MainPanel";
-import Footer from "./components/Footer";
-import AlertScreen, { loadingElement } from "./components/AlertScreen";
+import Header from "../components/Header";
+import MainPanel from "../components/MainPanel";
+import Footer from "../components/Footer";
+import AlertScreen, { loadingElement } from "../components/AlertScreen";
 
 export default function Home() {
   const [userSigner, setUserSigner] = useState<JsonRpcSigner | null>();
