@@ -1,16 +1,22 @@
 import styles from "../styles/Home.module.css"
 import { useState, useEffect } from 'react'
 import { useTheme } from 'next-themes'
-import { BrightnessHighFill, BrightnessLowFill, Lightbulb, LightbulbFill, MoonFill, SunFill } from "react-bootstrap-icons";
+import { MoonFill, SunFill } from "react-bootstrap-icons";
 
 export default function ThemeSwitch() {
     const [mounted, setMounted] = useState(false);
     const { theme, setTheme } = useTheme();
-    const [optionThemeName, setOptionThemeName] = useState();
 
     // useEffect only runs on the client, so now we can safely show the UI
     useEffect(() => {
-        setMounted(true)
+        setMounted(true);
+
+        //Determine system theme so we can properly set the theme value
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            setTheme("dark");
+        } else {
+            setTheme("light");
+        }
     }, [])
 
     if (!mounted) {

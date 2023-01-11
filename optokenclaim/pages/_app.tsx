@@ -6,7 +6,7 @@ import Head from "next/head";
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
-      <ThemeProvider>
+      <ThemeProvider enableSystem>
         <Head>
           <title>EthernautDAO OP Token Claim</title>
           <meta name="description" content="Simple UI for claiming OP tokens being distributed by EthernautDAO" />
