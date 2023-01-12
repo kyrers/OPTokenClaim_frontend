@@ -3,14 +3,15 @@ import { MouseEventHandler } from "react";
 
 type FunctionProps = {
     targetNetwork: any;
+    correctChain: boolean;
     connectedWallet: string;
     connect: MouseEventHandler<HTMLButtonElement>;
 };
 
-export default function Header({ targetNetwork, connectedWallet, connect }: FunctionProps) {
+export default function Header({ targetNetwork, connectedWallet, correctChain, connect }: FunctionProps) {
     const formatAddress = (address: string) => {
         return address.substring(0, 6) + "..." + address.slice(-4);
-    }
+    };
 
     return (
         <header className={styles.description}>
@@ -24,8 +25,13 @@ export default function Header({ targetNetwork, connectedWallet, connect }: Func
                             <span>Connect wallet</span>
                     }
                 </button>
-                <span className={styles.centeredText} style={{ color: targetNetwork.color }}>{targetNetwork.name}</span>
+                {
+                    correctChain ?
+                        <span className={styles.centeredText} style={{ color: targetNetwork.color }}>{targetNetwork.name}</span>
+                        :
+                        <span className={styles.centeredText} style={{ color: "red" }}>Wrong network</span>
+                }
             </div>
         </header>
     );
-}
+};
