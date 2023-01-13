@@ -1,3 +1,37 @@
+.walletSelector {
+  z-index: 2;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  transition: opacity .25s;
+}
+
+.walletSelector div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  height: 25%;
+  width: 25%;
+  background-color: rgba(var(--callout-rgb), 0.95);
+  border: 1px solid rgba(var(--callout-border-rgb), 0.3);
+  border-radius: var(--border-radius);
+  box-shadow: rgb(0 0 0 / 24%) 12px 16px 24px, rgb(0 0 0 / 24%) 12px 8px 12px, rgb(0 0 0 / 32%) 4px 4px;
+}
+
+.walletSelector button {
+  width: 15rem;
+  font-size: 20px;
+  font-weight: bold;
+  padding: 1rem;
+}
+
 .main {
   display: flex;
   flex-direction: column;
@@ -11,7 +45,8 @@
   padding-top: 1rem;
 }
 
-.description, .mainPanel {
+.description,
+.mainPanel {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -46,6 +81,7 @@
 
 .description button {
   width: 10rem;
+  height: 1.5rem;
 }
 
 .mainPanel {
@@ -67,6 +103,10 @@
   position: relative;
   width: 10rem;
   align-self: center;
+}
+
+.toggleSwitch button {
+  height: 1.5rem;
 }
 
 .alert {
@@ -204,7 +244,9 @@
 }
 
 @media (max-width: 793px) {
-  .description, .mainPanelInfo {
+
+  .description,
+  .mainPanelInfo {
     justify-content: center;
     text-align: center;
     flex-direction: column;

@@ -1,14 +1,14 @@
+import { Dispatch, SetStateAction } from "react";
 import styles from "../styles/Home.module.css"
-import { MouseEventHandler } from "react";
 
 type FunctionProps = {
     targetNetwork: any;
-    correctChain: boolean;
+    isTargetNetwork: boolean;
     connectedWallet: string;
-    connect: MouseEventHandler<HTMLButtonElement>;
+    setShowWalletSelector: Dispatch<SetStateAction<boolean>>;
 };
 
-export default function Header({ targetNetwork, connectedWallet, correctChain, connect }: FunctionProps) {
+export default function Header({ targetNetwork, connectedWallet, isTargetNetwork, setShowWalletSelector }: FunctionProps) {
     const formatAddress = (address: string) => {
         return address.substring(0, 6) + "..." + address.slice(-4);
     };
@@ -17,7 +17,7 @@ export default function Header({ targetNetwork, connectedWallet, correctChain, c
         <header className={styles.description}>
             <h1>EthernautDAO OP Token Claim</h1>
             <div>
-                <button onClick={connect}>
+                <button onClick={() => setShowWalletSelector(true)}>
                     {
                         connectedWallet !== "" ?
                             <span title={connectedWallet}>{formatAddress(connectedWallet)}</span>
@@ -26,10 +26,13 @@ export default function Header({ targetNetwork, connectedWallet, correctChain, c
                     }
                 </button>
                 {
-                    correctChain ?
-                        <span className={styles.centeredText} style={{ color: targetNetwork.color }}>{targetNetwork.name}</span>
+                    connectedWallet !== "" ?
+                        isTargetNetwork ?
+                            <span className={styles.centeredText} style={{ color: targetNetwork.color }}>{targetNetwork.name}</span>
+                            :
+                            <span className={styles.centeredText} style={{ color: "red" }}>Wrong network</span>
                         :
-                        <span className={styles.centeredText} style={{ color: "red" }}>Wrong network</span>
+                        <></>
                 }
             </div>
         </header>
