@@ -8,26 +8,43 @@ import Header from "../components/Header";
 import MainPanel from "../components/MainPanel";
 import Footer from "../components/Footer";
 import AlertScreen, { loadingElement, wrongChainElement } from "../components/AlertScreen";
-import { useAccount, useConnect } from "wagmi";
+import { useAccount, useConnect, useDisconnect } from "wagmi";
 import WalletSelector from "../components/WalletSelector";
 
 export default function Home() {
   //const [userSigner, setUserSigner] = useState<JsonRpcSigner | null>();
-  //const [isTargetNetwork, setIsTargetNetwork] = useState(false);
+  const [isTargetNetwork, setIsTargetNetwork] = useState(false);
   //const [connectedWallet, setConnectedWallet] = useState("");
   const [claimContract, setClaimContract] = useState<any>();
   const [currentEpoch, setCurrentEpoch] = useState(0);
   const [showAlert, setShowAlert] = useState(false);
   const [alertElement, setAlertElement] = useState<JSX.Element>(<></>);
-  const [user, setUser] = useState<any>({ signer: null, address: "", isTargetNetwork: false });
   const [showWalletSelector, setShowWalletSelector] = useState(false);
+
   const { address, connector: activeConnector, status, isConnected } = useAccount();
-  const { connect, connectors, error, isLoading, pendingConnector } = useConnect();
-  console.log("CONNECTORS", connectors)
+  const { connect, connectors, error, isLoading, pendingConnector, data } = useConnect({
+    onSuccess(data) {
+      setIsTargetNetwork(data.chain.id === targetNetwork.chainId);
+    },
+    onSettled(data) {
+      console.log("ON SETTLED", data);
+    }
+  });
+  const { disconnect } = useDisconnect();
 
   /*------------------------------------------------------------
                                HOOKS
   --------------------------------------------------------------*/
+  useEffect(() => {
+    console.log(activeConnector);
+    console.log(status);
+    console.log(isConnected);
+
+    console.log(error);
+    console.log(isLoading);
+    console.log(pendingConnector);
+    console.log(data);
+  }, [activeConnector]);
   //Connect user wallet & load contract
   // useEffect(() => {
   //   loadContract();
@@ -71,7 +88,7 @@ export default function Home() {
   //     connectUserToContract();
   //   }
   // }, [user]);
-  // //-------
+  //-------
 
   // /*------------------------------------------------------------
   //                                FUNCTIONS
@@ -81,11 +98,13 @@ export default function Home() {
     setClaimContract(contract);
   };
 
-  const promptConnect = async (connector: any) => {
-    //await connect(displayAlert);
+  const handleConnect = async (connector: any) => {
     connect({ connector });
-    setShowWalletSelector(false);
   };
+
+  const handleDisconnect = async () => {
+    disconnect();
+  }
 
   const promptChainSwitch = async () => {
     console.log("2. PROMPTING CHAIN SWITCH")
@@ -98,13 +117,13 @@ export default function Home() {
     /*setUserSigner(signer);
     setConnectedWallet(signerAddress);
     setIsTargetNetwork(currentChainId === targetNetwork.chainId);*/
-    setUser({ signer: signer, address: signerAddress, isTargetNetwork: currentChainId === targetNetwork.chainId });
+    //setUser({ signer: signer, address: signerAddress, isTargetNetwork: currentChainId === targetNetwork.chainId });
   };
 
   const connectUserToContract = async () => {
     console.log("5. CONNECTING TO CONTRACT")
     //setClaimContract(await claimContract.connect(userSigner));
-    setClaimContract(await claimContract.connect(user.signer));
+    //setClaimContract(await claimContract.connect(user.signer));
   };
 
   const getCurrentEpoch = async () => {
@@ -113,29 +132,29 @@ export default function Home() {
   };
 
   const handleContractInteraction = async (address: string, callback: Function) => {
-    if (!user.isTargetNetwork) {
-      console.log("1. ISTARGETNETWORK IS FALSE")
-      await promptChainSwitch().then(async () => {
-        console.log("6. IS NOW THE CORRECT CHAIN? ", user.isTargetNetwork);
-        if (user.isTargetNetwork) {
-          await callback(address);
-        } else {
-          displayAlert(wrongChainElement());
-        }
-      });
-    } else {
-      await callback(address);
-    }
+    /* if (!user.isTargetNetwork) {
+       console.log("1. ISTARGETNETWORK IS FALSE")
+       await promptChainSwitch().then(async () => {
+         console.log("6. IS NOW THE CORRECT CHAIN? ", user.isTargetNetwork);
+         if (isTargetNetwork) {
+           await callback(address);
+         } else {
+           displayAlert(wrongChainElement());
+         }
+       });
+     } else {
+       await callback(address);
+     }*/
   }
 
   const subscribe = async (address: string) => {
-    displayAlert(loadingElement("Subscribing"));
-    await subscribeAddress(claimContract, address, displayAlert);
+    /*displayAlert(loadingElement("Subscribing"));
+    await subscribeAddress(claimContract, address, displayAlert);*/
   };
 
   const claimOP = async (address: string) => {
-    displayAlert(loadingElement("Claiming"));
-    await claimOPTokens(claimContract, address, displayAlert);
+    /* displayAlert(loadingElement("Claiming"));
+     await claimOPTokens(claimContract, address, displayAlert);*/
   };
 
   const displayAlert = (element: JSX.Element) => {
@@ -147,9 +166,9 @@ export default function Home() {
   return (
     <>
       <main className={styles.main}>
-        {showWalletSelector ? <WalletSelector connectors={connectors} onConnect={promptConnect} setShowWalletSelector={setShowWalletSelector} /> : null}
-        <Header targetNetwork={targetNetwork} isTargetNetwork={user.isTargetNetwork} connectedWallet={address ?? ""} setShowWalletSelector={setShowWalletSelector} />
-        <MainPanel currentEpoch={currentEpoch} disableButtons={"" === user.address} subscribe={(address) => handleContractInteraction(address, subscribe)} claimOP={(address) => handleContractInteraction(address, claimOP)} />
+        {showWalletSelector ? <WalletSelector connectors={connectors} isConnected={isConnected} onConnect={handleConnect} onDisconnect={handleDisconnect} setShowWalletSelector={setShowWalletSelector} /> : null}
+        <Header targetNetwork={targetNetwork} isTargetNetwork={isTargetNetwork} connectedWallet={address ?? ""} setShowWalletSelector={setShowWalletSelector} />
+        <MainPanel currentEpoch={currentEpoch} disableButtons={undefined === address} subscribe={(address) => handleContractInteraction(address, subscribe)} claimOP={(address) => handleContractInteraction(address, claimOP)} />
         <AlertScreen show={showAlert} element={alertElement} setShow={setShowAlert} />
         <Footer />
       </main>

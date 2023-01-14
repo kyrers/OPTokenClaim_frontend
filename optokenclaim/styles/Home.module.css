@@ -29,7 +29,7 @@
   width: 15rem;
   font-size: 20px;
   font-weight: bold;
-  padding: 1rem;
+  padding: 0.5rem;
 }
 
 .main {
@@ -243,6 +243,12 @@
   }
 }
 
+@media (max-width: 620px) {
+  .walletSelector div {
+    width: 80% !important;
+  }
+}
+
 @media (max-width: 793px) {
 
   .description,
@@ -261,6 +267,18 @@
 
   .alert {
     width: 45%;
+  }
+}
+
+@media (max-width: 1000px) {
+  .walletSelector div {
+    width: 40%;
+  }
+}
+
+@media (max-height: 900px) {
+  .walletSelector div {
+    height: 50%;
   }
 }
 
