@@ -1,15 +1,16 @@
 import styles from "../styles/Home.module.css";
 import { useEffect, useState } from "react";
 import { JsonRpcSigner } from "@ethersproject/providers";
-import { targetNetwork } from "../config/config";
+import { contractABI, contractAddress, targetNetwork } from "../config/config";
 import { connect, getWalletInfo, switchChain } from "../functions/wallet";
-import { claimOPTokens, loadClaimContract, loadCurrentEpoch, subscribeAddress } from "../functions/contract";
+//import { claimOPTokens, loadClaimContract, loadCurrentEpoch, subscribeAddress } from "../functions/contract";
 import Header from "../components/Header";
 import MainPanel from "../components/MainPanel";
 import Footer from "../components/Footer";
 import AlertScreen, { loadingElement, wrongChainElement } from "../components/AlertScreen";
-import { useAccount, useConnect, useDisconnect } from "wagmi";
+import { useAccount, useConnect, useContractRead, useDisconnect, useNetwork } from "wagmi";
 import WalletSelector from "../components/WalletSelector";
+import { ethers } from "ethers";
 
 export default function Home() {
   //const [userSigner, setUserSigner] = useState<JsonRpcSigner | null>();
@@ -21,30 +22,34 @@ export default function Home() {
   const [alertElement, setAlertElement] = useState<JSX.Element>(<></>);
   const [showWalletSelector, setShowWalletSelector] = useState(false);
 
-  const { address, connector: activeConnector, status, isConnected } = useAccount();
-  const { connect, connectors, error, isLoading, pendingConnector, data } = useConnect({
-    onSuccess(data) {
-      setIsTargetNetwork(data.chain.id === targetNetwork.chainId);
-    },
-    onSettled(data) {
-      console.log("ON SETTLED", data);
+  const { address, isConnected } = useAccount();
+  const { connectAsync, connectors } = useConnect();
+  const { disconnect } = useDisconnect();
+  const { chain } = useNetwork();
+  const { refetch } = useContractRead({
+    address: contractAddress,
+    abi: contractABI,
+    functionName: "currentEpoch",
+    enabled: false,
+    chainId: targetNetwork.chainId,
+    onSuccess(data: any) {
+      setCurrentEpoch(data.toNumber());
     }
   });
-  const { disconnect } = useDisconnect();
 
   /*------------------------------------------------------------
                                HOOKS
   --------------------------------------------------------------*/
+  //Handle network changes - See Layout component describing issue with metamask
   useEffect(() => {
-    console.log(activeConnector);
-    console.log(status);
-    console.log(isConnected);
+    setIsTargetNetwork(chain?.id === targetNetwork.chainId);
+  }, [chain]);
 
-    console.log(error);
-    console.log(isLoading);
-    console.log(pendingConnector);
-    console.log(data);
-  }, [activeConnector]);
+  //Get current epoch
+  useEffect(() => {
+    refetch();
+  }, []);
+
   //Connect user wallet & load contract
   // useEffect(() => {
   //   loadContract();
@@ -68,7 +73,6 @@ export default function Home() {
 
   //     //Listen to network changes
   //     window.ethereum.on('chainChanged', () => {
-  //       console.log("3. CHAIN CHANGED EVENT")
   //       getUserWalletInfo();
   //     });
   //   }
@@ -94,12 +98,12 @@ export default function Home() {
   //                                FUNCTIONS
   // --------------------------------------------------------------*/
   const loadContract = async () => {
-    const contract = await loadClaimContract();
-    setClaimContract(contract);
+    /*const contract = await loadClaimContract();
+    setClaimContract(contract);*/
   };
 
   const handleConnect = async (connector: any) => {
-    connect({ connector });
+    await connectAsync({ connector });
   };
 
   const handleDisconnect = async () => {
@@ -107,12 +111,10 @@ export default function Home() {
   }
 
   const promptChainSwitch = async () => {
-    console.log("2. PROMPTING CHAIN SWITCH")
     await switchChain(displayAlert);
   };
 
   const getUserWalletInfo = async () => {
-    console.log("4. GETTING NEW USER WALLET INFO")
     const { signer, signerAddress, currentChainId } = await getWalletInfo(displayAlert);
     /*setUserSigner(signer);
     setConnectedWallet(signerAddress);
@@ -121,21 +123,13 @@ export default function Home() {
   };
 
   const connectUserToContract = async () => {
-    console.log("5. CONNECTING TO CONTRACT")
     //setClaimContract(await claimContract.connect(userSigner));
     //setClaimContract(await claimContract.connect(user.signer));
   };
 
-  const getCurrentEpoch = async () => {
-    const epoch = await loadCurrentEpoch(claimContract);
-    setCurrentEpoch(epoch);
-  };
-
   const handleContractInteraction = async (address: string, callback: Function) => {
     /* if (!user.isTargetNetwork) {
-       console.log("1. ISTARGETNETWORK IS FALSE")
        await promptChainSwitch().then(async () => {
-         console.log("6. IS NOW THE CORRECT CHAIN? ", user.isTargetNetwork);
          if (isTargetNetwork) {
            await callback(address);
          } else {

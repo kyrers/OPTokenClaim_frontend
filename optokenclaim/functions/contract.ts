@@ -1,4 +1,4 @@
-import { Contract, ethers } from "ethers";
+/*import { Contract, ethers } from "ethers";
 import { contractAddress, contractABI, targetNetwork } from '../config/config';
 import { transactionFailedElement, transactionSuccessElement } from "../components/AlertScreen";
 
@@ -31,4 +31,6 @@ export const claimOPTokens: any = async (contract: Contract, address: string, di
     } catch (error: any) {
         displayAlert(transactionFailedElement(`Transaction failed ${error.reason !== undefined ? `- ${error.reason}` : ""}`));
     }
-}
+}*/
+
+export default function x(){}

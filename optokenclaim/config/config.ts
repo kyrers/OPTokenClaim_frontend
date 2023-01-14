@@ -16,7 +16,7 @@ export const NETWORKS = {
 };
 
 export const targetNetwork = NETWORKS["optimism"];
-export const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS ?? "";
+export const contractAddress: `0x${string}` = "0x9b0365ec449d929f62106368eb3dc58b3d578b0b";
 export const contractABI = [
     { "inputs": [{ "internalType": "address", "name": "_EXP", "type": "address" }, { "internalType": "address", "name": "_OP", "type": "address" }, { "internalType": "address", "name": "_treasury", "type": "address" }], "stateMutability": "nonpayable", "type": "constructor" }, 
     { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "uint256", "name": "months", "type": "uint256" }], "name": "ClaimExtended", "type": "event" }, 

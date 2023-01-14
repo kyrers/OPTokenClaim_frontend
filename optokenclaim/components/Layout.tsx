@@ -23,6 +23,11 @@ export default function Layout({ children }: { children: ReactNode }) {
         webSocketProvider,
         autoConnect: true,
         connectors: [
+            /* 
+            There's a bug in MetaMask extension that causes disconnect events to sometimes be fired when switching chains
+            See: https://github.com/wagmi-dev/wagmi/issues/563 and https://github.com/MetaMask/metamask-extension/issues/13375
+            TO DO: Hotfix this somehow
+            */
             new MetaMaskConnector({ chains }),
             new CoinbaseWalletConnector({ chains, options: { appName: "EthernautDAO OP Token Claim" }, }),
             new WalletConnectConnector({ chains, options: { qrcode: true } })
