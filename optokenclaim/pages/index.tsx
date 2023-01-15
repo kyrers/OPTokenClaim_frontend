@@ -1,22 +1,21 @@
 import styles from "../styles/Home.module.css";
 import { useEffect, useState } from "react";
-import { JsonRpcSigner } from "@ethersproject/providers";
+//import { JsonRpcSigner } from "@ethersproject/providers";
 import { contractABI, contractAddress, targetNetwork } from "../config/config";
-import { connect, getWalletInfo, switchChain } from "../functions/wallet";
+//import { connect, getWalletInfo, switchChain } from "../functions/wallet";
 //import { claimOPTokens, loadClaimContract, loadCurrentEpoch, subscribeAddress } from "../functions/contract";
 import Header from "../components/Header";
 import MainPanel from "../components/MainPanel";
 import Footer from "../components/Footer";
 import AlertScreen, { loadingElement, wrongChainElement } from "../components/AlertScreen";
-import { useAccount, useConnect, useContractRead, useDisconnect, useNetwork } from "wagmi";
+import { useAccount, useConnect, useContractRead, useContractWrite, useDisconnect, useNetwork, usePrepareContractWrite } from "wagmi";
 import WalletSelector from "../components/WalletSelector";
-import { ethers } from "ethers";
 
 export default function Home() {
   //const [userSigner, setUserSigner] = useState<JsonRpcSigner | null>();
   const [isTargetNetwork, setIsTargetNetwork] = useState(false);
   //const [connectedWallet, setConnectedWallet] = useState("");
-  const [claimContract, setClaimContract] = useState<any>();
+  //const [claimContract, setClaimContract] = useState<any>();
   const [currentEpoch, setCurrentEpoch] = useState(0);
   const [showAlert, setShowAlert] = useState(false);
   const [alertElement, setAlertElement] = useState<JSX.Element>(<></>);
@@ -111,11 +110,11 @@ export default function Home() {
   }
 
   const promptChainSwitch = async () => {
-    await switchChain(displayAlert);
+    // await switchChain(displayAlert);
   };
 
   const getUserWalletInfo = async () => {
-    const { signer, signerAddress, currentChainId } = await getWalletInfo(displayAlert);
+    // const { signer, signerAddress, currentChainId } = await getWalletInfo(displayAlert);
     /*setUserSigner(signer);
     setConnectedWallet(signerAddress);
     setIsTargetNetwork(currentChainId === targetNetwork.chainId);*/
@@ -147,8 +146,8 @@ export default function Home() {
   };
 
   const claimOP = async (address: string) => {
-    /* displayAlert(loadingElement("Claiming"));
-     await claimOPTokens(claimContract, address, displayAlert);*/
+    displayAlert(loadingElement("Claiming"));
+    /*await claimOPTokens(claimContract, address, displayAlert);*/
   };
 
   const displayAlert = (element: JSX.Element) => {
@@ -162,7 +161,7 @@ export default function Home() {
       <main className={styles.main}>
         {showWalletSelector ? <WalletSelector connectors={connectors} isConnected={isConnected} onConnect={handleConnect} onDisconnect={handleDisconnect} setShowWalletSelector={setShowWalletSelector} /> : null}
         <Header targetNetwork={targetNetwork} isTargetNetwork={isTargetNetwork} connectedWallet={address ?? ""} setShowWalletSelector={setShowWalletSelector} />
-        <MainPanel currentEpoch={currentEpoch} disableButtons={undefined === address} subscribe={(address) => handleContractInteraction(address, subscribe)} claimOP={(address) => handleContractInteraction(address, claimOP)} />
+        <MainPanel currentEpoch={currentEpoch} isConnected={isConnected}  />
         <AlertScreen show={showAlert} element={alertElement} setShow={setShowAlert} />
         <Footer />
       </main>

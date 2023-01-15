@@ -1,4 +1,4 @@
-import { ethers } from "ethers";
+/*import { ethers } from "ethers";
 import { targetNetwork } from '../config/config';
 import { installWalletElement } from "../components/AlertScreen";
 
@@ -60,4 +60,6 @@ export const switchChain = async (displayAlert: (element: JSX.Element) => void) 
     } else {
         displayAlert(installWalletElement());
     }
-};
+};*/
+
+export default function y(){}
