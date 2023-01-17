@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import { ThemeProvider } from "next-themes";
 import { createClient, configureChains } from "wagmi";
-import { optimism } from "wagmi/chains";
+import { optimism, localhost } from "wagmi/chains";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { WagmiConfig } from "wagmi";
 import { CoinbaseWalletConnector } from "wagmi/connectors/coinbaseWallet";
@@ -17,14 +17,15 @@ export default function Layout({ children }: { children: ReactNode }) {
         [optimism],
         [alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_KEY ?? "" })]
     );
-
+    
     const wagmiClient = createClient({
         provider,
         webSocketProvider,
         autoConnect: true,
         connectors: [
             /* 
-            There's a bug in MetaMask extension that causes disconnect events to sometimes be fired when switching chains
+            There's a bug in MetaMask extension that causes disconnect events to sometimes be fired when switching chains.
+            Frequently occurs when chains are not MM default.
             See: https://github.com/wagmi-dev/wagmi/issues/563 and https://github.com/MetaMask/metamask-extension/issues/13375
             TO DO: Hotfix this somehow
             */

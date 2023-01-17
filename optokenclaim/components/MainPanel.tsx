@@ -6,9 +6,10 @@ import ThemeSwitch from "./ThemeSwitch";
 type FunctionProps = {
     currentEpoch: number;
     isConnected: boolean;
+    displayAlert: (element: JSX.Element) => void;
 };
 
-export default function MainPanel({ currentEpoch, isConnected }: FunctionProps) {
+export default function MainPanel({ currentEpoch, isConnected, displayAlert }: FunctionProps) {
     return (
         <div className={styles.mainPanel}>
             <div className={styles.mainPanelInfo}>
@@ -18,11 +19,11 @@ export default function MainPanel({ currentEpoch, isConnected }: FunctionProps) 
 
             <div className={styles.grid}>
                 <div className={styles.card} title="Subscribe">
-                    <SubscribeForm isConnected={isConnected} />
+                    <SubscribeForm isConnected={isConnected} displayAlert={displayAlert} />
                 </div>
 
                 <div className={styles.card} title="Claim OP">
-                    <ClaimOPForm isConnected={isConnected} />
+                    <ClaimOPForm isConnected={isConnected} displayAlert={displayAlert} />
                 </div>
             </div>
         </div>
