@@ -19,8 +19,8 @@
   justify-content: space-evenly;
   height: 25%;
   width: 25%;
-  background-color: rgba(var(--callout-rgb), 0.95);
-  border: 1px solid rgba(var(--callout-border-rgb), 0.3);
+  background: var(--panel-background);
+  border: 1px solid var(--panel-border-rgb);
   border-radius: var(--border-radius);
   box-shadow: rgb(0 0 0 / 24%) 12px 16px 24px, rgb(0 0 0 / 24%) 12px 8px 12px, rgb(0 0 0 / 32%) 4px 4px;
 }
@@ -30,6 +30,11 @@
   font-size: 20px;
   font-weight: bold;
   padding: 0.5rem;
+  background: var(--button-color);
+  border: none;
+  border-radius: var(--buton-border);
+  color: black;
+  cursor: pointer;
 }
 
 .main {
@@ -45,7 +50,7 @@
   padding-top: 1rem;
 }
 
-.description,
+.header,
 .mainPanel {
   display: flex;
   flex-direction: row;
@@ -55,33 +60,26 @@
   font-size: 0.85rem;
   max-width: var(--max-width);
   width: 100%;
-  font-family: var(--font-mono);
+  font-family: var(--font-family);
 }
 
-.description a {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.description p {
-  position: relative;
-  margin: 0;
-  padding: 1rem;
-  background-color: rgba(var(--callout-rgb), 0.5);
-  border: 1px solid rgba(var(--callout-border-rgb), 0.3);
-  border-radius: var(--border-radius);
-}
-
-.description div {
+.header div {
   display: flex;
   flex-direction: column;
 }
 
-.description button {
+.header button {
+  color: black;
   width: 10rem;
   height: 1.5rem;
+  background: var(--button-color);
+  border: none;
+  border-radius: var(--buton-border);
+  cursor: pointer;
+}
+
+.header button:hover {
+  background: var(--button-hover-color);
 }
 
 .mainPanel {
@@ -96,19 +94,6 @@
   width: inherit;
 }
 
-.toggleSwitch {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  position: relative;
-  width: 10rem;
-  align-self: center;
-}
-
-.toggleSwitch button {
-  height: 1.5rem;
-}
-
 .alert {
   position: absolute;
   display: flex;
@@ -117,8 +102,8 @@
   top: calc(100vh/2);
   padding: 1rem;
   margin: 1rem;
-  background-color: rgba(var(--callout-rgb), 1);
-  border: 1px solid rgba(var(--callout-border-rgb), 0.3);
+  background: var(--panel-background);
+  border: 1px solid var(--panel-border-rgb);
   border-radius: var(--border-radius);
   box-shadow: rgb(0 0 0 / 24%) 12px 16px 24px, rgb(0 0 0 / 24%) 12px 8px 12px, rgb(0 0 0 / 32%) 4px 4px;
   z-index: 1;
@@ -130,6 +115,23 @@
 
 .alert a {
   text-decoration: underline;
+}
+
+.alert button {
+  color: black;
+  background: var(--button-color);
+  border: none;
+  border-radius: var(--buton-border);
+  height: 2rem;
+  cursor: pointer;
+}
+
+.alert button:hover {
+  background: var(--button-hover-color);
+}
+
+.loading {
+  color: var(--description-text-color);
 }
 
 .loading:after {
@@ -196,8 +198,8 @@
   text-align: center;
   padding: 1rem;
   margin: 1rem;
-  background-color: rgba(var(--callout-rgb), 0.5);
-  border: 1px solid rgba(var(--callout-border-rgb), 0.3);
+  background: var(--panel-background);
+  border: 1px solid var(--panel-border-rgb);
   border-radius: var(--border-radius);
   box-shadow: rgb(0 0 0 / 24%) 12px 16px 24px, rgb(0 0 0 / 24%) 12px 8px 12px, rgb(0 0 0 / 32%) 4px 4px;
 }
@@ -212,6 +214,7 @@
   text-align: initial;
   font-weight: bold;
   margin-top: 1rem;
+  margin-bottom: 5px;
 }
 
 .card input {
@@ -220,10 +223,33 @@
 }
 
 .card button {
+  color: black;
   height: 2rem;
   margin-top: 1rem;
   margin-bottom: 1rem;
   cursor: pointer;
+  background: var(--button-color);
+  border: none;
+  border-radius: var(--buton-border);
+}
+
+.card button:hover {
+  background: var(--button-hover-color);
+}
+
+.card button:disabled {
+  background: var(--disabled-button-color);
+}
+
+.headerText {
+  background: var(--header-text-color);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.descriptionText {
+  color: var(--description-text-color);
 }
 
 /* Style */
@@ -251,7 +277,7 @@
 
 @media (max-width: 793px) {
 
-  .description,
+  .header,
   .mainPanelInfo {
     justify-content: center;
     text-align: center;

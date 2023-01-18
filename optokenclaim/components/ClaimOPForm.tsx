@@ -98,13 +98,13 @@ export default function ClaimOPForm({ isConnected, displayAlert }: FunctionProps
 
     return (
         <>
-            <h3>Claim OP</h3>
+            <h3 className={styles.headerText}>Claim OP</h3>
             <form onSubmit={handleSubmit}>
-                <label htmlFor="address">Address</label>
+                <label className={styles.descriptionText} htmlFor="address">Address</label>
                 <input id="address" name="address" type="text" minLength={42} maxLength={42} required placeholder="Address" onChange={(e) => setClaimAddress(e.target.value)} />
                 <button className={isLoading ? styles.loading : ""} disabled={isButtonDisabled()} type="submit">{getButtonText()}</button>
-                {isPrepareError && validAddress && !isNetworkError && <span>Transaction will fail{prepareErrorMessage}</span>}
+                {isPrepareError && validAddress && !isNetworkError && <span className={styles.descriptionText}>Transaction will fail{prepareErrorMessage}</span>}
             </form>
         </>
-    )
-}
+    );
+};

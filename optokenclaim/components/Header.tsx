@@ -1,5 +1,5 @@
-import { Dispatch, SetStateAction } from "react";
 import styles from "../styles/Home.module.css"
+import { Dispatch, SetStateAction } from "react";
 
 type FunctionProps = {
     targetNetwork: any;
@@ -14,8 +14,8 @@ export default function Header({ targetNetwork, connectedWallet, isTargetNetwork
     };
 
     return (
-        <header className={styles.description}>
-            <h1>EthernautDAO OP Token Claim</h1>
+        <header className={styles.header}>
+            <h1 className={styles.headerText}>EthernautDAO OP Token Claim</h1>
             <div>
                 <button onClick={() => setShowWalletSelector(true)}>
                     {

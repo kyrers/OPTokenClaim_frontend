@@ -4,7 +4,7 @@ import { contractABI, contractAddress, targetNetwork } from "../config/config";
 import Header from "../components/Header";
 import MainPanel from "../components/MainPanel";
 import Footer from "../components/Footer";
-import AlertScreen from "../components/AlertScreen";
+import AlertScreen, { installWalletElement } from "../components/AlertScreen";
 import { useAccount, useConnect, useContractRead, useDisconnect, useNetwork } from "wagmi";
 import WalletSelector from "../components/WalletSelector";
 
@@ -16,7 +16,13 @@ export default function Home() {
   const [showWalletSelector, setShowWalletSelector] = useState(false);
 
   const { address, isConnected } = useAccount();
-  const { connectAsync, connectors } = useConnect();
+  const { connectAsync, connectors } = useConnect({
+    onError(error) {
+      if(error.name === "ConnectorNotFoundError") {
+        displayAlert(installWalletElement());
+      }
+    }
+  });
   const { disconnect } = useDisconnect();
   const { chain } = useNetwork();
   const { refetch } = useContractRead({

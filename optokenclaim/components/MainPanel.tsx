@@ -1,7 +1,6 @@
 import styles from "../styles/Home.module.css";
 import ClaimOPForm from "./ClaimOPForm";
 import SubscribeForm from "./SubscribeForm";
-import ThemeSwitch from "./ThemeSwitch";
 
 type FunctionProps = {
     currentEpoch: number;
@@ -13,8 +12,7 @@ export default function MainPanel({ currentEpoch, isConnected, displayAlert }: F
     return (
         <div className={styles.mainPanel}>
             <div className={styles.mainPanelInfo}>
-                <h2>Current Epoch: {currentEpoch} </h2>
-                <ThemeSwitch />
+                <h2 className={styles.headerText}>Current Epoch: {currentEpoch} </h2>
             </div>
 
             <div className={styles.grid}>

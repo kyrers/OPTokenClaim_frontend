@@ -14,7 +14,7 @@ export default function WalletSelector({ connectors, isConnected, onConnect, onD
         return (
             <div className={styles.walletSelector} onClick={() => setShowWalletSelector(false)}>
                 <div >
-                    <h1 className={styles.centeredText}>Disconnect Wallet?</h1>
+                    <h1 className={styles.centeredText && styles.headerText}>Disconnect Wallet?</h1>
                     <button type="button" key="disconnect_wallet" onClick={() => onDisconnect()}>
                         Disconnect
                     </button>
@@ -26,7 +26,7 @@ export default function WalletSelector({ connectors, isConnected, onConnect, onD
     return (
         <div className={styles.walletSelector} onClick={() => setShowWalletSelector(false)}>
             <div >
-                <h1 className={styles.centeredText}>Choose Wallet</h1>
+                <h1 className={styles.centeredText && styles.headerText}>Choose Wallet</h1>
                 {
                     connectors.map((connector: any) => {
                         return (

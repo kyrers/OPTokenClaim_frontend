@@ -97,13 +97,13 @@ export default function SubscribeForm({ isConnected, displayAlert }: FunctionPro
 
     return (
         <>
-            <h3>Subscribe</h3>
+            <h3 className={styles.headerText}>Subscribe</h3>
             <form onSubmit={handleSubmit}>
-                <label htmlFor="address">Address</label>
+                <label className={styles.descriptionText} htmlFor="address">Address</label>
                 <input id="address" name="address" type="text" minLength={42} maxLength={42} required placeholder="Address" onChange={(e) => setSubscribeAddress(e.target.value)} />
                 <button className={isLoading ? styles.loading : ""} disabled={isButtonDisabled()} type="submit">{getButtonText()}</button>
-                {isPrepareError && validAddress && !isNetworkError && <span>Transaction will fail{prepareErrorMessage}</span>}
+                {isPrepareError && validAddress && !isNetworkError && <span className={styles.descriptionText}>Transaction will fail{prepareErrorMessage}</span>}
             </form>
         </>
-    )
-}
+    );
+};

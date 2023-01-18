@@ -20,11 +20,11 @@ export default function AlertScreen({ show, element, setShow }: FunctionProps) {
 };
 
 export const installWalletElement = () => {
-    return <div>Please install metamask to continue</div>;
+    return <div className={styles.descriptionText}><p>Please install the selected wallet to continue</p></div>;
 };
 
 export const wrongChainElement = () => {
-    return <div>Please switch to the Optimism network</div>;
+    return <div className={styles.descriptionText}>Please switch to the Optimism network</div>;
 };
 
 export const loadingElement = (text: string) => {
@@ -32,9 +32,9 @@ export const loadingElement = (text: string) => {
 };
 
 export const transactionSuccessElement = (text: string, blockExplorerUrl: string) => {
-    return <div>{text} - <a href={blockExplorerUrl} target="_blank" rel="noopener noreferrer">See on block explorer</a></div>
+    return <div className={styles.descriptionText}>{text} - <a href={blockExplorerUrl} target="_blank" rel="noopener noreferrer">See on block explorer</a></div>
 };
 
 export const transactionFailedElement = (text: string) => {
-    return <div>{text}</div>;
+    return <div className={styles.descriptionText}>{text}</div>;
 };

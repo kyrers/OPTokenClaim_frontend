@@ -1,7 +1,6 @@
 import { ReactNode } from "react";
-import { ThemeProvider } from "next-themes";
 import { createClient, configureChains } from "wagmi";
-import { optimism, localhost } from "wagmi/chains";
+import { optimism } from "wagmi/chains";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { WagmiConfig } from "wagmi";
 import { CoinbaseWalletConnector } from "wagmi/connectors/coinbaseWallet";
@@ -17,7 +16,7 @@ export default function Layout({ children }: { children: ReactNode }) {
         [optimism],
         [alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_KEY ?? "" })]
     );
-    
+
     const wagmiClient = createClient({
         provider,
         webSocketProvider,
@@ -40,16 +39,14 @@ export default function Layout({ children }: { children: ReactNode }) {
     }
 
     return (
-        <ThemeProvider enableSystem>
-            <WagmiConfig client={wagmiClient}>
-                <Head>
-                    <title>EthernautDAO OP Token Claim</title>
-                    <meta name="description" content="Simple UI for claiming OP tokens being distributed by EthernautDAO" />
-                    <meta name="viewport" content="width=device-width, initial-scale=1" />
-                    <link rel="icon" href="/edaologo.png" />
-                </Head>
-                {children}
-            </WagmiConfig>
-        </ThemeProvider>
+        <WagmiConfig client={wagmiClient}>
+            <Head>
+                <title>EthernautDAO OP Token Claim</title>
+                <meta name="description" content="Simple UI for claiming OP tokens being distributed by EthernautDAO" />
+                <meta name="viewport" content="width=device-width, initial-scale=1" />
+                <link rel="icon" href="/edaologo.png" />
+            </Head>
+            {children}
+        </WagmiConfig>
     );
 };
