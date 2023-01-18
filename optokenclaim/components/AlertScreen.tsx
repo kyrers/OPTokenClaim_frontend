@@ -20,7 +20,7 @@ export default function AlertScreen({ show, element, setShow }: FunctionProps) {
 };
 
 export const installWalletElement = () => {
-    return <div className={styles.descriptionText}><p>Please install the selected wallet to continue</p></div>;
+    return <div className={styles.descriptionText}>Please install the selected wallet to continue</div>;
 };
 
 export const wrongChainElement = () => {
