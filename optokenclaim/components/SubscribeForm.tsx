@@ -37,7 +37,7 @@ export default function SubscribeForm({ isConnected, displayAlert }: FunctionPro
         onSuccess() {
             /*
             Always set to false here, because if the user is on the wrong chain there is a networkError, however the user can still initiate the tx and will be prompted to switch chains before sending it.
-            In this flow, the isNetworkError would never be set to false, causing the button text to remain unchanged
+            In this flow, the isNetworkError would never be set to false.
             */
             setIsNetworkError(false);
 
@@ -78,11 +78,7 @@ export default function SubscribeForm({ isConnected, displayAlert }: FunctionPro
 
     const isButtonDisabled = () => {
         return !isConnected || !validAddress || (!write && isPrepareError && !isNetworkError);
-    }
-
-    const getButtonText = () => {
-        return !isConnected ? "Connect Wallet" : isNetworkError || !isTargetNetwork ? "Connect to Optimism & Subscribe" : "Subscribe";
-    }
+    };
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();
@@ -97,11 +93,10 @@ export default function SubscribeForm({ isConnected, displayAlert }: FunctionPro
 
     return (
         <>
-            <h3 className={styles.headerText}>Subscribe</h3>
             <form onSubmit={handleSubmit}>
                 <label className={styles.descriptionText} htmlFor="address">Address</label>
                 <input id="address" name="address" type="text" minLength={42} maxLength={42} required placeholder="Address" onChange={(e) => setSubscribeAddress(e.target.value)} />
-                <button className={isLoading ? styles.loading : ""} disabled={isButtonDisabled()} type="submit">{getButtonText()}</button>
+                <button className={isLoading ? styles.loading : ""} disabled={isButtonDisabled()} type="submit">Subscribe</button>
                 {isPrepareError && validAddress && !isNetworkError && <span className={styles.descriptionText}>Transaction will fail{prepareErrorMessage}</span>}
             </form>
         </>
