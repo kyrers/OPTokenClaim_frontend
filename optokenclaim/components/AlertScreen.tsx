@@ -1,5 +1,6 @@
-import { Dispatch, SetStateAction } from "react";
 import styles from "../styles/Home.module.css"
+import { Dispatch, SetStateAction } from "react";
+import { infoText } from "../config/config";
 
 type FunctionProps = {
     show: boolean;
@@ -18,6 +19,10 @@ export default function AlertScreen({ show, element, setShow }: FunctionProps) {
             <></>
     );
 };
+
+export const infoElement = () => {
+    return <div className={styles.descriptionText}>{infoText}</div>;
+}
 
 export const installWalletElement = () => {
     return <div className={styles.descriptionText}>Please install the selected wallet to continue</div>;

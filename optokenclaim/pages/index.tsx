@@ -1,6 +1,6 @@
 import styles from "../styles/Home.module.css";
 import { useEffect, useState } from "react";
-import { contractABI, contractAddress, targetNetwork } from "../config/config";
+import { claimContractABI, claimContractAddress, targetNetwork } from "../config/config";
 import Header from "../components/Header";
 import MainPanel from "../components/MainPanel";
 import Footer from "../components/Footer";
@@ -18,7 +18,7 @@ export default function Home() {
   const { address, isConnected } = useAccount();
   const { connectAsync, connectors } = useConnect({
     onError(error) {
-      if(error.name === "ConnectorNotFoundError") {
+      if (error.name === "ConnectorNotFoundError") {
         displayAlert(installWalletElement());
       }
     }
@@ -26,8 +26,8 @@ export default function Home() {
   const { disconnect } = useDisconnect();
   const { chain } = useNetwork();
   const { refetch } = useContractRead({
-    address: contractAddress,
-    abi: contractABI,
+    address: claimContractAddress,
+    abi: claimContractABI,
     functionName: "currentEpoch",
     enabled: false,
     chainId: targetNetwork.chainId,
@@ -63,8 +63,8 @@ export default function Home() {
     <>
       <main className={styles.main}>
         {showWalletSelector ? <WalletSelector connectors={connectors} isConnected={isConnected} onConnect={handleConnect} onDisconnect={handleDisconnect} setShowWalletSelector={setShowWalletSelector} /> : null}
-        <Header targetNetwork={targetNetwork} isTargetNetwork={isTargetNetwork} connectedWallet={address ?? ""} setShowWalletSelector={setShowWalletSelector} />
-        <MainPanel currentEpoch={currentEpoch} isConnected={isConnected} displayAlert={displayAlert} />
+        <Header targetNetwork={targetNetwork} isTargetNetwork={isTargetNetwork} connectedWallet={address ?? ""} setShowWalletSelector={setShowWalletSelector} displayAlert={displayAlert} />
+        <MainPanel currentEpoch={currentEpoch} displayAlert={displayAlert} />
         <AlertScreen show={showAlert} element={alertElement} setShow={setShowAlert} />
         <Footer />
       </main>

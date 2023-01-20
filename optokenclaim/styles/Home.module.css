@@ -63,11 +63,6 @@
   font-family: var(--font-family);
 }
 
-.header div {
-  display: flex;
-  flex-direction: column;
-}
-
 .header button {
   color: black;
   width: 10rem;
@@ -80,6 +75,22 @@
 
 .header button:hover {
   background: var(--button-hover-color);
+}
+
+.headerInfo {
+  display: flex;
+  flex-direction: row;
+}
+
+.headerInfo svg {
+  cursor: pointer;
+  align-self: center;
+  margin-left: 1rem;
+}
+
+.headerWallet {
+  display: flex;
+  flex-direction: column;
 }
 
 .mainPanel {
@@ -195,6 +206,9 @@
 }
 
 .card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   text-align: center;
   padding: 1rem;
   margin: 1rem;
@@ -207,7 +221,7 @@
 .card form {
   display: inline-grid;
   margin-top: 1rem;
-  width: 95%;
+  width: 100%;
 }
 
 .card label {
@@ -225,7 +239,6 @@
 .card button {
   color: black;
   height: 2rem;
-  margin-top: 1rem;
   margin-bottom: 1rem;
   cursor: pointer;
   background: var(--button-color);
@@ -248,8 +261,13 @@
   -webkit-text-fill-color: transparent;
 }
 
-.descriptionText {
+.descriptionText, .formDescriptionText {
   color: var(--description-text-color);
+}
+
+.formDescriptionText {
+  padding: 0.5rem;
+  text-align: initial;
 }
 
 /* Style */
@@ -283,6 +301,11 @@
     text-align: center;
     flex-direction: column;
     word-break: break-word;
+  }
+
+  .headerInfo {
+    flex-direction: column;
+    margin-bottom: 1rem;
   }
 
   .grid {

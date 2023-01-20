@@ -1,39 +1,53 @@
 import styles from "../styles/Home.module.css";
-import { useState } from "react";
-import { useContractWrite, useNetwork, usePrepareContractWrite, useSwitchNetwork } from "wagmi";
-import { contractABI, contractAddress, targetNetwork } from "../config/config";
+import { useEffect, useState } from "react";
+import { useAccount, useContractRead, useContractWrite, useNetwork, usePrepareContractWrite, useSwitchNetwork } from "wagmi";
+import { claimContractABI, claimContractAddress, targetNetwork } from "../config/config";
 import { formatErrorMessage, generateBlockExplorerUrl } from "../utils/common";
 import { loadingElement, transactionFailedElement, transactionSuccessElement } from "./AlertScreen";
+import useExpBalance from "../hooks/useExpBalance";
 
 type FunctionProps = {
-    isConnected: boolean;
+    currentEpoch: number;
     displayAlert: (element: JSX.Element) => void;
 };
 
-export default function ClaimOPForm({ isConnected, displayAlert }: FunctionProps) {
-    const [claimAddress, setClaimAddress] = useState<any>(undefined);
-    const [prepareErrorMessage, setPrepareErrorMessage] = useState("");
+export default function ClaimOPForm({ currentEpoch, displayAlert }: FunctionProps) {
+    const [claimableBalance, setClaimableBalance] = useState<number | undefined>(undefined);
     const [isNetworkError, setIsNetworkError] = useState(false);
     const [isToExecuteAfterNetworkChange, setIsToExecuteAfterNetworkChange] = useState(false);
 
-    const validAddress = undefined !== claimAddress && claimAddress.length === 42;
+    const { address, isConnected } = useAccount();
+
+    const { fetchSubscribedExpBalance } = useExpBalance({
+        currentEpoch: currentEpoch,
+        address: address
+    });
 
     const { chain } = useNetwork();
+
+    const validAddress = undefined !== address;
+    const canClaim = (claimableBalance ?? 0) > 0;
     const isTargetNetwork = chain?.id === targetNetwork.chainId;
 
     const { switchNetwork } = useSwitchNetwork({
         onError(error: any) {
+            /*
+           Always set to false here, because if it is to execute after the network changed but the user rejects switching networks, it would never be set to false.
+           This would mean that when the user connected to the correct network, the app would try to send the subscribe tx
+           */
+            setIsToExecuteAfterNetworkChange(false);
+
             displayAlert(transactionFailedElement(`Transaction failed ${formatErrorMessage(error)}`));
         },
     });
 
     const { config, isError: isPrepareError, isLoading } = usePrepareContractWrite({
-        address: contractAddress,
-        abi: contractABI,
+        address: claimContractAddress,
+        abi: claimContractABI,
         functionName: "claimOP",
         chainId: targetNetwork.chainId,
-        args: [claimAddress],
-        enabled: validAddress,
+        args: [address],
+        enabled: validAddress && canClaim,
         onSuccess() {
             /*
             Always set to false here, because if the user is on the wrong chain there is a networkError, however the user can still initiate the tx and will be prompted to switch chains before sending it.
@@ -49,7 +63,7 @@ export default function ClaimOPForm({ isConnected, displayAlert }: FunctionProps
                 }
             }
         },
-        onError(err: any) { //any type is needed to access reason, otherwise wagmi only exports full message
+        onError() {
             /*
             Always set to false here, because if it is to execute after the network changed but usePrepareContractWrite errors out, it would never be set to false.
             This would mean that when usePrepareContractWrite reached onSuccess, it would start the tx automatically, due to isToExecuteAfterNetworkChange still being true after a chain switch happened
@@ -61,7 +75,6 @@ export default function ClaimOPForm({ isConnected, displayAlert }: FunctionProps
                 setIsNetworkError(true)
             } else {
                 setIsNetworkError(false);
-                setPrepareErrorMessage(formatErrorMessage(err));
             }
         }
     });
@@ -69,7 +82,8 @@ export default function ClaimOPForm({ isConnected, displayAlert }: FunctionProps
     const { write } = useContractWrite({
         ...config,
         onSuccess(data) {
-            setClaimAddress(undefined);
+            fetchClaimableBalance();
+            fetchSubscribedExpBalance();
             displayAlert(transactionSuccessElement("Transaction succeeded", generateBlockExplorerUrl(data.hash)));
         },
         onError(error: any) {
@@ -77,8 +91,32 @@ export default function ClaimOPForm({ isConnected, displayAlert }: FunctionProps
         },
     });
 
+    const { refetch: fetchClaimableBalance, isFetching: isFetchingClaimableBalance } = useContractRead({
+        address: claimContractAddress,
+        abi: claimContractABI,
+        functionName: "calcReward",
+        enabled: false,
+        chainId: targetNetwork.chainId,
+        args: [address, (currentEpoch > 0 ? currentEpoch - 1 : currentEpoch)],
+        onSuccess(data: any) {
+            setClaimableBalance(data / 10 ** 18);
+        },
+        onError() {
+            setClaimableBalance(undefined);
+        },
+    });
+
+    //Fetch when address or epoch changes. Epoch is needed to keep the claimable balance up to date
+    useEffect(() => {
+        if (address) {
+            fetchClaimableBalance();
+        } else {
+            setClaimableBalance(undefined);
+        }
+    }, [address, currentEpoch]);
+
     const isButtonDisabled = () => {
-        return !isConnected || !validAddress || (!write && isPrepareError && !isNetworkError);
+        return !isConnected || !validAddress || (!write && isPrepareError && !isNetworkError) || !canClaim || isFetchingClaimableBalance;
     };
 
     const handleSubmit = async (e: any) => {
@@ -94,12 +132,18 @@ export default function ClaimOPForm({ isConnected, displayAlert }: FunctionProps
 
     return (
         <>
+            {
+                isConnected && !isFetchingClaimableBalance ?
+                    <>
+                        <h3 className={styles.formDescriptionText}>Claimable OP: {claimableBalance !== undefined && !isFetchingClaimableBalance ? `${claimableBalance} EXP` : ""}  </h3>
+                    </>
+                    :
+                    null
+            }
+
             <form onSubmit={handleSubmit}>
-                <label className={styles.descriptionText} htmlFor="address">Address</label>
-                <input id="address" name="address" type="text" minLength={42} maxLength={42} required placeholder="Address" onChange={(e) => setClaimAddress(e.target.value)} />
                 <button className={isLoading ? styles.loading : ""} disabled={isButtonDisabled()} type="submit">Claim</button>
-                {isPrepareError && validAddress && !isNetworkError && <span className={styles.descriptionText}>Transaction will fail{prepareErrorMessage}</span>}
             </form>
         </>
-    );
+    )
 };

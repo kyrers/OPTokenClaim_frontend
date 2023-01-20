@@ -1,14 +1,14 @@
+import { useAccount } from "wagmi";
 import styles from "../styles/Home.module.css";
 import ClaimOPForm from "./ClaimOPForm";
 import SubscribeForm from "./SubscribeForm";
 
 type FunctionProps = {
     currentEpoch: number;
-    isConnected: boolean;
     displayAlert: (element: JSX.Element) => void;
 };
 
-export default function MainPanel({ currentEpoch, isConnected, displayAlert }: FunctionProps) {
+export default function MainPanel({ currentEpoch, displayAlert }: FunctionProps) {
     return (
         <div className={styles.mainPanel}>
             <div className={styles.mainPanelInfo}>
@@ -17,11 +17,11 @@ export default function MainPanel({ currentEpoch, isConnected, displayAlert }: F
 
             <div className={styles.grid}>
                 <div className={styles.card} title="Subscribe">
-                    <SubscribeForm isConnected={isConnected} displayAlert={displayAlert} />
+                    <SubscribeForm currentEpoch={currentEpoch} displayAlert={displayAlert} />
                 </div>
 
                 <div className={styles.card} title="Claim OP">
-                    <ClaimOPForm isConnected={isConnected} displayAlert={displayAlert} />
+                    <ClaimOPForm currentEpoch={currentEpoch} displayAlert={displayAlert} />
                 </div>
             </div>
         </div>
