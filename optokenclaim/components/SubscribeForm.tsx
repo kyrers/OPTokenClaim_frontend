@@ -26,7 +26,7 @@ export default function SubscribeForm({ currentEpoch, displayAlert }: FunctionPr
     const { chain } = useNetwork();
 
     const validAddress = undefined !== address;
-    const canSubscribe = (expBalance ?? 0) > (subscribedExpBalance ?? 0);
+    const canSubscribe = (expBalance ?? 0) > (subscribedExpBalance ?? 0) && (subscribedExpBalance ?? 0) < 99;
     const isTargetNetwork = chain?.id === targetNetwork.chainId;
 
     const { switchNetwork } = useSwitchNetwork({
