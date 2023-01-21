@@ -116,7 +116,7 @@ export default function ClaimOPForm({ currentEpoch, displayAlert }: FunctionProp
     }, [address, currentEpoch]);
 
     const isButtonDisabled = () => {
-        return !isConnected || !validAddress || (!write && isPrepareError && !isNetworkError) || !canClaim || isFetchingClaimableBalance;
+        return !isConnected || !validAddress || (isPrepareError && !isNetworkError) || !canClaim || isFetchingClaimableBalance;
     };
 
     const handleSubmit = async (e: any) => {

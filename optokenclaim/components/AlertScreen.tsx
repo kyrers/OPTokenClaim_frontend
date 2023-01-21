@@ -1,6 +1,6 @@
 import styles from "../styles/Home.module.css"
 import { Dispatch, SetStateAction } from "react";
-import { infoText } from "../config/config";
+import { infoText } from "../utils/strings";
 
 type FunctionProps = {
     show: boolean;
@@ -11,25 +11,28 @@ type FunctionProps = {
 export default function AlertScreen({ show, element, setShow }: FunctionProps) {
     return (
         show ?
-            <div className={styles.alert}>
-                {element}
-                <button onClick={() => setShow(false)}>Ok</button>
-            </div >
+            <div className={styles.alertScreen}>
+                <div className={styles.alertContainer}>
+                    {element}
+                    <button onClick={() => setShow(false)}>Ok</button>
+                </div>
+            </div>
             :
             <></>
+
     );
 };
 
 export const infoElement = () => {
-    return <div className={styles.descriptionText}>{infoText}</div>;
+    return <div className={styles.alertText}>{infoText}</div>;
 }
 
 export const installWalletElement = () => {
-    return <div className={styles.descriptionText}>Please install the selected wallet to continue</div>;
+    return <div className={styles.alertText}>Please install the selected wallet to continue</div>;
 };
 
 export const wrongChainElement = () => {
-    return <div className={styles.descriptionText}>Please switch to the Optimism network</div>;
+    return <div className={styles.alertText}>Please switch to the Optimism network</div>;
 };
 
 export const loadingElement = (text: string) => {
@@ -37,9 +40,9 @@ export const loadingElement = (text: string) => {
 };
 
 export const transactionSuccessElement = (text: string, blockExplorerUrl: string) => {
-    return <div className={styles.descriptionText}>{text} - <a href={blockExplorerUrl} target="_blank" rel="noopener noreferrer">See on block explorer</a></div>
+    return <div className={styles.alertText}>{text} - <a href={blockExplorerUrl} target="_blank" rel="noopener noreferrer">See on block explorer</a></div>
 };
 
 export const transactionFailedElement = (text: string) => {
-    return <div className={styles.descriptionText}>{text}</div>;
+    return <div className={styles.alertText}>{text}</div>;
 };

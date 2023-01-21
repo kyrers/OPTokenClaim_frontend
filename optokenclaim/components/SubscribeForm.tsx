@@ -8,10 +8,11 @@ import useExpBalance from "../hooks/useExpBalance";
 
 type FunctionProps = {
     currentEpoch: number;
+    maxEpoch: number;
     displayAlert: (element: JSX.Element) => void;
 };
 
-export default function SubscribeForm({ currentEpoch, displayAlert }: FunctionProps) {
+export default function SubscribeForm({ currentEpoch, maxEpoch, displayAlert }: FunctionProps) {
     const [expBalance, setExpBalance] = useState<number | undefined>(undefined);
     const [isNetworkError, setIsNetworkError] = useState(false);
     const [isToExecuteAfterNetworkChange, setIsToExecuteAfterNetworkChange] = useState(false);
@@ -26,7 +27,7 @@ export default function SubscribeForm({ currentEpoch, displayAlert }: FunctionPr
     const { chain } = useNetwork();
 
     const validAddress = undefined !== address;
-    const canSubscribe = (expBalance ?? 0) > (subscribedExpBalance ?? 0) && (subscribedExpBalance ?? 0) < 99;
+    const canSubscribe = (expBalance ?? 0) > (subscribedExpBalance ?? 0) && (subscribedExpBalance ?? 0) < 99 && currentEpoch + 1 <= maxEpoch;
     const isTargetNetwork = chain?.id === targetNetwork.chainId;
 
     const { switchNetwork } = useSwitchNetwork({
@@ -125,7 +126,7 @@ export default function SubscribeForm({ currentEpoch, displayAlert }: FunctionPr
     }, [currentEpoch]);
 
     const isButtonDisabled = () => {
-        return !isConnected || !validAddress || (!write && isPrepareError && !isNetworkError) || !canSubscribe || isFetchingExpBalance || isFetchingSubscribedExpBalance;
+        return !isConnected || !validAddress || (isPrepareError && !isNetworkError) || !canSubscribe || isFetchingExpBalance || isFetchingSubscribedExpBalance;
     };
 
     const handleSubmit = async (e: any) => {

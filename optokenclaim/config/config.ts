@@ -15,7 +15,8 @@ export const NETWORKS = {
     }
 };
 
-export const infoText = "";
+//30 days in seconds
+export const thirtyDays = 30 * 60 * 60 * 24;
 
 export const targetNetwork = NETWORKS["optimism"];
 

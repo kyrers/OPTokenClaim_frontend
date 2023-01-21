@@ -1,16 +1,15 @@
 import styles from "../styles/Home.module.css";
 import { useEffect, useState } from "react";
-import { claimContractABI, claimContractAddress, targetNetwork } from "../config/config";
+import { targetNetwork } from "../config/config";
 import Header from "../components/Header";
 import MainPanel from "../components/MainPanel";
 import Footer from "../components/Footer";
 import AlertScreen, { installWalletElement } from "../components/AlertScreen";
-import { useAccount, useConnect, useContractRead, useDisconnect, useNetwork } from "wagmi";
+import { useAccount, useConnect, useDisconnect, useNetwork } from "wagmi";
 import WalletSelector from "../components/WalletSelector";
 
 export default function Home() {
   const [isTargetNetwork, setIsTargetNetwork] = useState(false);
-  const [currentEpoch, setCurrentEpoch] = useState(0);
   const [showAlert, setShowAlert] = useState(false);
   const [alertElement, setAlertElement] = useState<JSX.Element>(<></>);
   const [showWalletSelector, setShowWalletSelector] = useState(false);
@@ -25,26 +24,11 @@ export default function Home() {
   });
   const { disconnect } = useDisconnect();
   const { chain } = useNetwork();
-  const { refetch } = useContractRead({
-    address: claimContractAddress,
-    abi: claimContractABI,
-    functionName: "currentEpoch",
-    enabled: false,
-    chainId: targetNetwork.chainId,
-    onSuccess(data: any) {
-      setCurrentEpoch(data.toNumber());
-    }
-  });
 
   //Handle network changes - See Layout component describing issue with metamask
   useEffect(() => {
     setIsTargetNetwork(chain?.id === targetNetwork.chainId);
   }, [chain]);
-
-  //Get current epoch
-  useEffect(() => {
-    refetch();
-  }, []);
 
   const handleConnect = async (connector: any) => {
     await connectAsync({ connector });
@@ -64,7 +48,7 @@ export default function Home() {
       <main className={styles.main}>
         {showWalletSelector ? <WalletSelector connectors={connectors} isConnected={isConnected} onConnect={handleConnect} onDisconnect={handleDisconnect} setShowWalletSelector={setShowWalletSelector} /> : null}
         <Header targetNetwork={targetNetwork} isTargetNetwork={isTargetNetwork} connectedWallet={address ?? ""} setShowWalletSelector={setShowWalletSelector} displayAlert={displayAlert} />
-        <MainPanel currentEpoch={currentEpoch} displayAlert={displayAlert} />
+        <MainPanel displayAlert={displayAlert} />
         <AlertScreen show={showAlert} element={alertElement} setShow={setShowAlert} />
         <Footer />
       </main>

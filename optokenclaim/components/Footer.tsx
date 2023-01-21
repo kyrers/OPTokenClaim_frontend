@@ -1,10 +1,13 @@
 import styles from "../styles/Home.module.css"
-import { Twitter, Discord, Medium } from "react-bootstrap-icons";
+import { Twitter, Discord, Medium, Github } from "react-bootstrap-icons";
 
 export default function Footer() {
     return (
         <footer className={styles.footer}>
             <div>
+                <a href="https://github.com/ethernautdao/ethernaut-op-claim" target="_blank" rel="noopener noreferrer">
+                    <Github size={24} />
+                </a>
                 <a href="https://twitter.com/EthernautDAO" target="_blank" rel="noopener noreferrer">
                     <Twitter size={24} />
                 </a>
