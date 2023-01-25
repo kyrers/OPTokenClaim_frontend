@@ -4,6 +4,7 @@ import { claimContractABI, claimContractAddress, targetNetwork, thirtyDays } fro
 import styles from "../styles/Home.module.css";
 import ClaimOPForm from "./ClaimOPForm";
 import SubscribeForm from "./SubscribeForm";
+import HelpText from "./HelpText";
 
 type FunctionProps = {
     displayAlert: (element: JSX.Element) => void;
@@ -15,7 +16,7 @@ type Config = {
 }
 
 export default function MainPanel({ displayAlert }: FunctionProps) {
-    const [config, setConfig] = useState<Config>(); 
+    const [config, setConfig] = useState<Config>();
     const [currentEpoch, setCurrentEpoch] = useState(0);
     const [nextEpoch, setNextEpoch] = useState("");
 
@@ -75,6 +76,8 @@ export default function MainPanel({ displayAlert }: FunctionProps) {
                     <ClaimOPForm currentEpoch={currentEpoch} displayAlert={displayAlert} />
                 </div>
             </div>
+
+            <HelpText />
         </div>
     );
 };

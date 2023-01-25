@@ -47,7 +47,7 @@ export default function Home() {
     <>
       <main className={styles.main}>
         {showWalletSelector ? <WalletSelector connectors={connectors} isConnected={isConnected} onConnect={handleConnect} onDisconnect={handleDisconnect} setShowWalletSelector={setShowWalletSelector} /> : null}
-        <Header targetNetwork={targetNetwork} isTargetNetwork={isTargetNetwork} connectedWallet={address ?? ""} setShowWalletSelector={setShowWalletSelector} displayAlert={displayAlert} />
+        <Header targetNetwork={targetNetwork} isTargetNetwork={isTargetNetwork} connectedWallet={address ?? ""} setShowWalletSelector={setShowWalletSelector} />
         <MainPanel displayAlert={displayAlert} />
         <AlertScreen show={showAlert} element={alertElement} setShow={setShowAlert} />
         <Footer />
