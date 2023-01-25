@@ -180,6 +180,7 @@
   -webkit-text-fill-color: transparent;;
   white-space: break-spaces;
   padding: 1rem;
+  margin-bottom: 1rem;
 }
 
 .helpText h2 {
